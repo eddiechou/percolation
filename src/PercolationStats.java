@@ -22,8 +22,8 @@ import edu.princeton.cs.algs4.StdStats;
 
 public class PercolationStats {
 	private int numTrials;	// The number of trials to perform
-	Percolation perc;		// Percolation model object
-	double[] results;		// Results of each trial (ratio of open/closed sites)
+	private Percolation perc;		// Percolation model object
+	private double[] results;		// Results of each trial (ratio of open/closed sites)
 	
 	// perform trials independent experiments on an n-by-n grid
    public PercolationStats(int n, int trials){

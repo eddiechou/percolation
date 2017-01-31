@@ -12,7 +12,7 @@
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
-	private int gridSize;		// Grid size of the model
+    private int gridSize; // Grid size of the model
 	private int numOpenSites;	// Keeps track of the number of open sites
 	
 	// Possible states that a site can be in
