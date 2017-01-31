@@ -22,7 +22,6 @@ import edu.princeton.cs.algs4.StdStats;
 
 public class PercolationStats {
 	private int numTrials;	// The number of trials to perform
-	private Percolation perc;		// Percolation model object
 	private double[] results;		// Results of each trial (ratio of open/closed sites)
 	
 	// perform trials independent experiments on an n-by-n grid
@@ -32,7 +31,7 @@ public class PercolationStats {
 	   results = new double[trials];
 	   // Run trials
 	   for (int i=0; i<numTrials; i++) {
-		   perc = new Percolation(n);
+		   Percolation perc = new Percolation(n);
 		   while (!perc.percolates()) {
 			   int row = StdRandom.uniform(1, n+1);
 			   int col = StdRandom.uniform(1, n+1);
