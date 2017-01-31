@@ -12,9 +12,6 @@
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
-    private int gridSize; // Grid size of the model
-	private int numOpenSites;	// Keeps track of the number of open sites
-	
 	// Possible states that a site can be in
 	private static final byte CLOSED = 0;
 	private static final byte OPEN = 1;
@@ -23,12 +20,15 @@ public class Percolation {
 	private static final byte CONNECTED_BOTH = 7;
 	private byte[] state;
 	
+	private int gridSize; // Grid size of the model
+	private int numOpenSites;	// Keeps track of the number of open sites
+	
 	private WeightedQuickUnionUF connections;	// The union-find data type					
 	private boolean hasPercolated;				// A flag for if the model percolates
 	
 	// create n-by-n grid, with all sites blocked
-   public Percolation(int n){
-	   if(n < 0) throw new IllegalArgumentException();
+   public Percolation(int n) {
+	   if (n <= 0) throw new IllegalArgumentException();
 	   hasPercolated = false;
 	   gridSize = n;
 	   
@@ -36,8 +36,8 @@ public class Percolation {
 	   numOpenSites = 0;
 	   state = new byte[numSites];	// 1 to n indexing
 	   // Initialize all states to closed (false)
-	   for(int i = 1; i < n+1; i++){
-		   for(int j = 1; j < n+1; j++){
+	   for (int i = 1; i < n+1; i++) {
+		   for(int j = 1; j < n+1; j++) {
 			   state[xyTo1D(i,j)] = CLOSED;
 		   }
 	   }
@@ -45,7 +45,7 @@ public class Percolation {
    }
    
    // open site (row, col) if it is not open already
-   public void open(int row, int col){
+   public void open(int row, int col) {
 	   checkBounds(row, col);
 	   int site = xyTo1D(row, col);
 	   int top;
@@ -53,42 +53,42 @@ public class Percolation {
 	   int right;
 	   int bot;
 	   byte topState = 0, leftState = 0, rightState = 0, botState = 0;
-	   if((state[site] & OPEN) == OPEN){
+	   if ((state[site] & OPEN) == OPEN) {
 		   return;
 	   }
 	   state[site] |= OPEN;
 	   
-	   if(row==1){
+	   if (row == 1) {
 		   state[site] |= CONNECTED_TOP;
 	   }
-	   if(row==gridSize){
+	   if (row == gridSize) {
 		   state[site] |= CONNECTED_BOTTOM;
 	   }
 	   int neighbor;
 	   // Set up WeightedQuickUnionUF unions
 	   // If top is open
-	   if(row > 1 && isOpen(row-1, col)){
+	   if (row > 1 && isOpen(row-1, col)) {
 		   top = xyTo1D(row-1, col);
 		   neighbor = connections.find(top);	// gets root of top
 		   topState = state[neighbor];			// gets state of top's root
 		   connections.union(site, neighbor);	// connect top and site
 	   }
 	   // If left is open
-	   if(col > 1 && isOpen(row, col-1)){
+	   if (col > 1 && isOpen(row, col-1)) {
 		   left = xyTo1D(row, col-1);
 		   neighbor = connections.find(left);	// gets root of left
 		   leftState = state[neighbor];			// gets state of left's root
 		   connections.union(site, neighbor);
 	   }
 	   // If right is open
-	   if(col < gridSize && isOpen(row, col+1)){
+	   if (col < gridSize && isOpen(row, col+1)) {
 		   right = xyTo1D(row, col+1);
 		   neighbor = connections.find(right);	// gets root of left
 		   rightState = state[neighbor];			// gets state of left's root
 		   connections.union(site, neighbor);
 	   }
 	   // If bottom is open
-	   if(row < gridSize && isOpen(row+1, col)){
+	   if (row < gridSize && isOpen(row+1, col)) {
 		   bot = xyTo1D(row+1, col);
 		   neighbor = connections.find(bot);	// gets root of left
 		   botState = state[neighbor];			// gets state of left's root
@@ -98,53 +98,53 @@ public class Percolation {
 	   int newRoot = connections.find(site);
 	   state[newRoot] |= (byte)(topState | leftState | rightState | botState | state[site]);
 	   // Check if newRoot is connected to both top and bottom
-	   if((state[newRoot] & CONNECTED_BOTH) == CONNECTED_BOTH){
+	   if ((state[newRoot] & CONNECTED_BOTH) == CONNECTED_BOTH) {
 		   hasPercolated = true;
 	   }
 	   numOpenSites++;
    }
    
-   private void checkBounds(int row, int col){
-	   if(row < 1 || row > gridSize || col < 1 || col > gridSize){
+   private void checkBounds(int row, int col) {
+	   if (row < 1 || row > gridSize || col < 1 || col > gridSize) {
 		   throw new IndexOutOfBoundsException();
 	   }
    }
    
-   private void checkBoundsState(int row, int col){
-	   if(row < 0 || row > gridSize || col < 0 || col > gridSize){
+   private void checkBoundsState(int row, int col) {
+	   if (row < 0 || row > gridSize || col < 0 || col > gridSize) {
 		   throw new IndexOutOfBoundsException();
 	   }
    }
    
    // Translate to start = 0 (top-left will be 1, 1)
-   private int xyTo1D(int row, int col){
+   private int xyTo1D(int row, int col) {
 	   return (row * gridSize) + col;
    }
    
    // is site (row, col) open?
-   public boolean isOpen(int row, int col){
+   public boolean isOpen(int row, int col) {
 	   checkBoundsState(row, col);
 	   return state[xyTo1D(row, col)] > 0;	// return state of root
    }
    
    // is site (row, col) full/closed?
-   public boolean isFull(int row, int col){
+   public boolean isFull(int row, int col) {
 	   checkBounds(row, col);
 	   return (state[connections.find(xyTo1D(row, col))] & CONNECTED_TOP) == CONNECTED_TOP;	// Find state of root 
    }
    
    // number of open sites
-   public int numberOfOpenSites(){
+   public int numberOfOpenSites() {
 	   return numOpenSites;
    }
    // does the system percolate?
    // Connect from virtual point at top, and at bottom
-   public boolean percolates(){
+   public boolean percolates() {
 	   return hasPercolated;
    }
    
    // test client (optional)
-   public static void main(String[] args){
+   public static void main(String[] args) {
 	   
    }
 }

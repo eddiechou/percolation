@@ -26,19 +26,18 @@ public class PercolationStats {
 	private double[] results;		// Results of each trial (ratio of open/closed sites)
 	
 	// perform trials independent experiments on an n-by-n grid
-   public PercolationStats(int n, int trials){
-	   if(n<=0 || trials<=0) throw new java.lang.IllegalArgumentException();
+   public PercolationStats(int n, int trials) {
+	   if(n <= 0 || trials <= 0) throw new java.lang.IllegalArgumentException();
 	   numTrials = trials;
 	   results = new double[trials];
 	   // Run trials
-	   for(int i=0; i<numTrials; i++){
+	   for (int i=0; i<numTrials; i++) {
 		   perc = new Percolation(n);
-		   while(!perc.percolates()){
+		   while (!perc.percolates()) {
 			   int row = StdRandom.uniform(1, n+1);
 			   int col = StdRandom.uniform(1, n+1);
 			   perc.open(row, col);
 		   }
-		   
 		   results[i] = (double)perc.numberOfOpenSites() / (double)(n*n);
 	   }
 
@@ -56,12 +55,12 @@ public class PercolationStats {
    
    // low  endpoint of 95% confidence interval
    public double confidenceLo(){
-	   return mean() - (1.96*stddev() / Math.sqrt(numTrials));
+	   return mean() - (1.96 * stddev() / Math.sqrt(numTrials));
    }
    
    // high endpoint of 95% confidence interval
    public double confidenceHi(){
-	   return  mean() + (1.96*stddev()/ Math.sqrt(numTrials));
+	   return  mean() + (1.96 * stddev()/ Math.sqrt(numTrials));
    }
    
    // test client (described below)
